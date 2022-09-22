@@ -1,0 +1,16 @@
+int Solution::solve(vector<int> &A) {
+    int n = A.size();
+    int rightSum = 0;
+    for (int i = 0; i < n; i++) {
+        rightSum = rightSum + A[i];        
+    }    
+    int leftSum = 0;    
+    for (int i = 0; i < n; i++) {
+        rightSum = rightSum - A[i];
+        if (rightSum == leftSum) {            
+            return i;            
+        }
+        leftSum = leftSum + A[i];
+    }    
+    return -1;
+}

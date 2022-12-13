@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int pathSum(vector<vector<int>> &A, vector<vector<int>> &dp, int i, int j, int n) {
+        if (i == n || j < 0 || j == n) return INT_MAX;    
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+        int x = min(pathSum(A, dp, i+1, j-1, n), pathSum(A, dp, i+1, j, n));
+        int y = min(x, pathSum(A, dp, i+1, j+1, n));
+        if (y == INT_MAX) {
+            dp[i][j] = A[i][j];
+        } else {
+            dp[i][j] = A[i][j] + y;
+        }        
+        return dp[i][j];
+    }
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        vector<vector<int>> dp(n, vector<int>(n, -1));        
+        int res = INT_MAX;
+        res = min(res, pathSum(matrix, dp, 0, 0, n));        
+        for (int i = 1; i < n; i++) {
+            res = min(res, pathSum(matrix, dp, 0, i, n));            
+        }
+        return res;
+    }
+};

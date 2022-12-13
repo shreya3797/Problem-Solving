@@ -1,0 +1,60 @@
+vector<int> getLeftSmaller(vector<int> &A, int n) {
+    stack<int> st; 
+    vector<int> B(n, -1);   
+    for (int i = 0; i < n; i++) {
+        while (!st.empty() && A[i] <= A[st.top()]) {
+            st.pop();            
+        }
+        if (!st.empty()) {
+            B[i] = st.top();
+        }
+        st.push(i);
+    }
+    return B;
+}
+
+vector<int> getRightSmaller(vector<int> &A, int n) {
+    stack<int> st;
+    vector<int> B(n, n);
+    for (int i = n-1; i >= 0; i--) {
+        while (!st.empty() && A[i] <=  A[st.top()]) {
+            st.pop();
+        }
+        if (!st.empty()) {
+            B[i] = st.top();
+        }
+        st.push(i);
+    }
+    return B;
+}
+
+int calculateMax(vector<int> &A, int n) {
+    vector<int> leftSmaller(n);
+    vector<int> rightSmaller(n);
+    leftSmaller = getLeftSmaller(A, n);
+    rightSmaller = getRightSmaller(A, n);
+    int ans = (rightSmaller[0] - leftSmaller[0] - 1)*A[0];
+    for (int i = 1; i < n; i++) {
+        ans = max((rightSmaller[i] - leftSmaller[i] - 1)*A[i], ans);
+    }
+    return ans;
+}
+
+int Solution::maximalRectangle(vector<vector<int> > &A) {
+    int n = A.size();
+    int m = A[0].size();
+    vector<int> temp(m, 0);
+    temp = A[0];
+    int ans = calculateMax(A[0], m);    
+    for (int i = 1; i < n; i++) {        
+        for (int j = 0; j < m; j++) {
+            if (A[i][j] == 1) {
+                temp[j] += 1;
+            } else {
+                temp[j] = 0;
+            }
+        }        
+        ans = max(ans, calculateMax(temp, m));
+    }
+    return ans;
+}

@@ -1,0 +1,18 @@
+int Solution::solve(vector<int> &A, vector<int> &B, int C) {
+    int n = A.size();
+    int m = C;    
+    vector<int> above(m+1, 0);
+    vector<int> below(m+1, 0);
+    for (int i = 1; i <= n; i++) {
+        below = above;
+        for (int j = 1; j <= m; j++) {
+            if (B[i-1] <= j) {        
+                below[j] = max(A[i-1] + above[j-B[i-1]], above[j]);
+            } else {
+                below[j] = above[j];
+            }
+        }
+        above = below;
+    }
+    return below[C];
+}

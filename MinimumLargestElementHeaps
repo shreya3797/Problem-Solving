@@ -1,0 +1,26 @@
+struct comparator {
+    bool operator()(pair<int, int> &A, pair<int, int> &B) {
+        return A.first + A.second > B.first + B.second;
+    }
+};
+
+int Solution::solve(vector<int> &A, int B) {
+    int n = A.size();    
+    int x = A[0];
+    priority_queue<pair<int, int>, vector<pair<int, int>>, comparator> pq;    
+    for (int i = 0; i < n; i++) {
+        pq.push({A[i], A[i]});
+    }
+    while (B > 0) {
+        pair<int, int> temp = pq.top();
+        pq.pop();
+        pq.push({temp.first+temp.second, temp.second});
+        B--;
+    }
+    int ans = pq.top().first;
+    while (pq.size() > 0) {
+        ans = max(ans, pq.top().first);
+        pq.pop();
+    }
+    return ans;
+}
